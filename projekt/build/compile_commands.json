@@ -1,0 +1,67 @@
+[
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/c++    -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu++14 -o CMakeFiles/izgProjekt2016.dir/gpu/gpu.cpp.o -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/gpu/gpu.cpp",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/gpu/gpu.cpp"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/student_cpu.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/student_cpu.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/student_cpu.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/student_pipeline.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/student_pipeline.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/student_pipeline.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/student_shader.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/student_shader.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/student_shader.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/linearAlgebra.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/linearAlgebra.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/linearAlgebra.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/main.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/main.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/main.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/camera.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/camera.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/camera.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/bunny.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/bunny.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/bunny.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/mouseCamera.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/mouseCamera.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/mouseCamera.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/student/swapBuffers.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/swapBuffers.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/student/swapBuffers.c"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/c++    -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu++14 -o CMakeFiles/izgProjekt2016.dir/tests/conformanceTests.cpp.o -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/tests/conformanceTests.cpp",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/tests/conformanceTests.cpp"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/c++    -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu++14 -o CMakeFiles/izgProjekt2016.dir/tests/performanceTest.cpp.o -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/tests/performanceTest.cpp",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/tests/performanceTest.cpp"
+},
+{
+  "directory": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/build",
+  "command": "/usr/bin/cc   -I/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt    -W -Wall -pedantic -Wconversion -std=gnu99 -o CMakeFiles/izgProjekt2016.dir/examples/triangleExample.c.o   -c /mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/examples/triangleExample.c",
+  "file": "/mnt/sdb/FIT/FIT_druhy_rocnik_2016-2017/FIT_LS_2016/IZG/projekt/examples/triangleExample.c"
+}
+]

@@ -31,3 +31,15 @@
 # Debug files
 *.dSYM/
 *.su
+
+prednasky
+doc
+build
+CMakeModules
+examples
+gpu
+images
+libs
+tests
+bin
+3rdParty
