@@ -89,10 +89,12 @@ void phong_onInit(int32_t width,int32_t height){
 
   cpu_reserveUniform(gpu, "projectionMatrix", UNIFORM_MAT4);
   cpu_reserveUniform(gpu, "viewMatrix", UNIFORM_MAT4);
-  program = cpu_createProgram(gpu)
+  program = cpu_createProgram(gpu);
   cpu_attachVertexShader(gpu, program, /*ukazatel na funci co reprezentuje vertex shader*/);
-  cpu_attachVertexShader(gpu, program, /*ukazatel na funci co reprezentuje fragment shader*/);
+  cpu_attachFragmentShader(gpu, program, /*ukazatel na funci co reprezentuje fragment shader*/);
   cpu_setAttributeInterpolation(gpu, program, 0, ATTRIB_VEC3, SMOOTH);
+  cpu_createBuffers(gpu,/*pocet bufferu*/, /*ukazatel na buffer*/);
+
 }
 
 /// @}
