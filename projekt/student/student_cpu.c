@@ -83,10 +83,9 @@ void phong_onInit(int32_t width,int32_t height){
   ///  - cpu_setVertexPullerHead()
   ///  - cpu_enableVertexPullerHead()
   ///  - cpu_setIndexing()
-
+#if 0
   GPU gpu = phong.gpu;
   ProgramID program;
-
   cpu_reserveUniform(gpu, "projectionMatrix", UNIFORM_MAT4);
   cpu_reserveUniform(gpu, "viewMatrix", UNIFORM_MAT4);
   program = cpu_createProgram(gpu);
@@ -94,7 +93,7 @@ void phong_onInit(int32_t width,int32_t height){
   cpu_attachFragmentShader(gpu, program, /*ukazatel na funci co reprezentuje fragment shader*/);
   cpu_setAttributeInterpolation(gpu, program, 0, ATTRIB_VEC3, SMOOTH);
   cpu_createBuffers(gpu,/*pocet bufferu*/, /*ukazatel na buffer*/);
-
+#endif
 }
 
 /// @}

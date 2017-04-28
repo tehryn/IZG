@@ -1,11 +1,11 @@
 /*!
- * @file 
+ * @file
  * @brief This file contains implementation of rendering pipeline.
  *
  * @author Tomáš Milet, imilet@fit.vutbr.cz
  *
  */
-
+// def stack exchange baricentricke souradnice
 
 #include<stdlib.h>
 #include<stdio.h>
@@ -21,52 +21,54 @@
 VertexIndex gpu_computeGLVertexID(
     VertexIndex            const*const indices               ,
     VertexShaderInvocation       const vertexShaderInvocation){
-  /// \todo Naimplementujte výpočet gl_VertexID z vertexShaderInvocation
-  /// a případného indexování.
-  /// vertexShaderInvocation obsahuje pořadové číslo spuštění (invokace) 
-  /// vertex shaderu v rámci jednoho vykreslovacího příkazu.
-  /// gl_VertexID je index vertexu, který se má poslat do vertex shaderu - návratová hodnota této funkce.
-  /// Pokud není aktivní indexing, index vertexu odpovída pořadovému číslu
-  /// invokace vertex shaderu.
-  /// Pokud je aktivní indexing, je potřeba zaadresovat správný gl_VertexID
-  /// z bufferu indexů (indices) pomocí čísla invokace.
-  /// Indexing je aktivní, pokud buffer indexů není NULL.
-  (void)indices;
-  (void)vertexShaderInvocation;
-  return 0;
+	/// \todo Naimplementujte výpočet gl_VertexID z vertexShaderInvocation
+	/// a případného indexování.
+	/// vertexShaderInvocation obsahuje pořadové číslo spuštění (invokace)
+	/// vertex shaderu v rámci jednoho vykreslovacího příkazu.
+	/// gl_VertexID je index vertexu, který se má poslat do vertex shaderu - návratová hodnota této funkce.
+	/// Pokud není aktivní indexing, index vertexu odpovída pořadovému číslu
+	/// invokace vertex shaderu.
+	/// Pokud je aktivní indexing, je potřeba zaadresovat správný gl_VertexID
+	/// z bufferu indexů (indices) pomocí čísla invokace.
+	/// Indexing je aktivní, pokud buffer indexů není NULL.
+    return (indices == NULL)?vertexShaderInvocation:indices[vertexShaderInvocation];
 }
 
 void const* gpu_computeVertexAttributeDataPointer(
     GPUVertexPullerHead const*const head       ,
     VertexIndex               const gl_VertexID){
-  /// \todo Naimplementujte výpočet ukazatele pro daný vertex attribut a číslo vrcholu.
-  /// Tato funkce počíta přesný ukazatel na data vertex atributu.
-  /// Dejte si pozor na ukazatelovou aritmetiku, ukazatel musí být na byte přesně.
-  /// Správná adresa se odvíjí od adresy bufferu, offsetu čtěcí hlavy, čísla vrcholu a kroku čtecí hlavy.
-  assert(head != NULL);
-  (void)head;
-  (void)gl_VertexID;
-  return NULL;
+	/// \todo Naimplementujte výpočet ukazatele pro daný vertex attribut a číslo vrcholu.
+	/// Tato funkce počíta přesný ukazatel na data vertex atributu.
+	/// Dejte si pozor na ukazatelovou aritmetiku, ukazatel musí být na byte přesně.
+	/// Správná adresa se odvíjí od adresy bufferu, offsetu čtěcí hlavy, čísla vrcholu a kroku čtecí hlavy.
+    assert(head != NULL);
+    return (char *)head->buffer + head->stride*gl_VertexID + head->offset;
 }
 
 void gpu_runVertexPuller(
     GPUVertexPullerOutput             *const output                ,
     GPUVertexPullerConfiguration const*const puller                ,
     VertexShaderInvocation             const vertexShaderInvocation){
-  /// \todo Naimplementujte funkci vertex pulleru, využijte funkce
-  /// gpu_computeGLVertexID a gpu_computeVertexAttrbuteDataPointer.
-  /// Funkce vertex pulleru je nastavit správné adresy vertex attributů.
-  /// Výstupem vertex pulleru je struktura obsahují seznam pointerů.
-  /// Vašim úkolem je vypočítat správné adresy jednotlivých attributů.
-  /// Pokud daný atribut/čtecí hlava není povolený/neexistuje nastavte jeho adresu na NULL.<br>
-  /// <b>Seznam funkcí, které jistě využijete:</b>
-  ///  - gpu_computeGLVertexID()
-  ///  - gpu_computeVertexAttributeDataPointer()
-  assert(output != NULL);
-  assert(puller != NULL);
-  (void)output;
-  (void)puller;
-  (void)vertexShaderInvocation;
+	/// \todo Naimplementujte funkci vertex pulleru, využijte funkce
+	/// gpu_computeGLVertexID a gpu_computeVertexAttrbuteDataPointer.
+	/// Funkce vertex pulleru je nastavit správné adresy vertex attributů.
+	/// Výstupem vertex pulleru je struktura obsahují seznam pointerů.
+	/// Vašim úkolem je vypočítat správné adresy jednotlivých attributů.
+	/// Pokud daný atribut/čtecí hlava není povolený/neexistuje nastavte jeho adresu na NULL.<br>
+	/// <b>Seznam funkcí, které jistě využijete:</b>
+	///  - gpu_computeGLVertexID()
+	///  - gpu_computeVertexAttributeDataPointer()
+    assert(output != NULL);
+    assert(puller != NULL);
+    for (int i = 0; i < MAX_ATTRIBUTES; i++) {
+        VertexIndex id = gpu_computeGLVertexID(puller->indices, vertexShaderInvocation);
+        if (!(puller->heads[i].enabled)) {
+            output->attributes[i] = NULL;
+        }
+        else {
+            output->attributes[i] =  gpu_computeVertexAttributeDataPointer(&(puller->heads[i]), id);
+        }
+    }
 }
 
 void gpu_runPrimitiveAssembly(
@@ -76,37 +78,42 @@ void gpu_runPrimitiveAssembly(
     GPUVertexPullerConfiguration const*const puller                    ,
     VertexShaderInvocation             const baseVertexShaderInvocation,
     VertexShader                       const vertexShader              ){
-  assert(primitive            != NULL);
-  assert(nofPrimitiveVertices <= VERTICES_PER_TRIANGLE);
-  assert(puller               != NULL);
-  assert(vertexShader         != NULL);
-  (void)gpu;
-  (void)primitive;
-  (void)nofPrimitiveVertices;
-  (void)puller;
-  (void)baseVertexShaderInvocation;
-  (void)vertexShader;
-  /// \todo Naimplementujte funkci jednotky sestavující primitiva.
-  /// Vašim úkolem je spustit vertex puller a dodaný vertex shader nad každým vrcholem primitiva.
-  /// Funkce by měla spustit vertex puller/vertex shader N krát (podle množství vrcholů primitiva).
-  /// Výstupy z vertex shaderu vložte do parametru primitive.
-  /// Počet vrcholů primitiva je udán v nofPrimitiveVertices.
-  /// Čislo invokace vertex shaderu pro první vrchol primitiva je v baseVertexShaderInvocation proměnné.
-  /// Nezapomeňte spustit nad každým vrcholem primitiva vertex shader.
-  /// Nezapomeňte do každého vrcholu správně zapsat číslo vrcholu (gl_VertexID)<br>
-  /// <b>Seznam funkcí, které jistě využijete:</b>
-  ///  - gpu_runVertexPuller()
-  ///  - gpu_computeGLVertexID()<br>
-  /// <b>Seznam struktur, které jistě využijete:</b>
-  ///  - GPUVertexPullerOutput()
-  ///  - GPUVertexShaderInput()
+    assert(primitive            != NULL);
+    assert(nofPrimitiveVertices <= VERTICES_PER_TRIANGLE);
+    assert(puller               != NULL);
+    assert(vertexShader         != NULL);
+	/// \todo Naimplementujte funkci jednotky sestavující primitiva.
+	/// Vašim úkolem je spustit vertex puller a dodaný vertex shader nad každým vrcholem primitiva.
+	/// Funkce by měla spustit vertex puller/vertex shader N krát (podle množství vrcholů primitiva).
+	/// Výstupy z vertex shaderu vložte do parametru primitive.
+	/// Počet vrcholů primitiva je udán v nofPrimitiveVertices.
+	/// Čislo invokace vertex shaderu pro první vrchol primitiva je v baseVertexShaderInvocation proměnné.
+	/// Nezapomeňte spustit nad každým vrcholem primitiva vertex shader.
+	/// Nezapomeňte do každého vrcholu správně zapsat číslo vrcholu (gl_VertexID)<br>
+	/// <b>Seznam funkcí, které jistě využijete:</b>
+	///  - gpu_runVertexPuller()
+	///  - gpu_computeGLVertexID()<br>
+	/// <b>Seznam struktur, které jistě využijete:</b>
+	///  - GPUVertexPullerOutput()
+	///  - GPUVertexShaderInput()
+	GPUVertexPullerOutput puller_out;
+    GPUVertexShaderInput  shader_in;
+    GPUVertexShaderOutput shader_out;
+    for (unsigned i = 0; i < nofPrimitiveVertices; i++) {
+        shader_in.gl_VertexID = gpu_computeGLVertexID(puller->indices, baseVertexShaderInvocation + i);
+        gpu_runVertexPuller(&puller_out, puller, baseVertexShaderInvocation + i);
+        shader_in.attributes  = &puller_out;
+        (*vertexShader)(&shader_out, &shader_in, gpu);
+        primitive->vertices[i] = shader_out;
+    }
+    primitive->nofUsedVertices = nofPrimitiveVertices;
 }
 
 /// @}
 
 /**
  * @brief This function does clipping of an edge by frustum plane.
- * 
+ *
  * A point P(t) on the edge is: P(t) = vertexA + t*(vertexB - vertexA), t in [0,1].
  * This function returns interval of possible values of parameter t for which P(t) is in front of frustum plane.
  * The interval is returned in arguments: minT and maxT.
@@ -129,24 +136,24 @@ void gpu_runFrustumPlaneClippingOnEdge(
     Vec4   const*const vertexB ,
     size_t       const axis    ,
     size_t       const positive){
-  // A point on a triangle edge:
-  // A(a,b,t) = a + t*(b-a)
-  // a,b are positions of triangle vertices
-  // t in [0,1]
-  //
-  // -A(a,b,t)w <= (2p-1)*A(a,b,t)i
-  // i - axis
-  // p - positive flag
-  //
-  // solve for t
-  // -aw - t*(bw-aw) <= (1-2p)*(ai + t*(bi-ai))
-  // -t*(bw-aw) - (1-2p)*t*(bi-ai) <= (1-2p)*ai + aw
-  // t*(-bw+aw-(1-2p)*(bi-ai)) <= (1-2p)*ai + aw
-  // t*M <= N
-  // M>0 -> t <= N/M
-  // M<0 -> t >= N/M
-  // M=0 and N>=0 -> t = any value
-  // M=0 and N< 0 -> t = no value
+	// A point on a triangle edge:
+	// A(a,b,t) = a + t*(b-a)
+	// a,b are positions of triangle vertices
+	// t in [0,1]
+	//
+	// -A(a,b,t)w <= (2p-1)*A(a,b,t)i
+	// i - axis
+	// p - positive flag
+	//
+	// solve for t
+	// -aw - t*(bw-aw) <= (1-2p)*(ai + t*(bi-ai))
+	// -t*(bw-aw) - (1-2p)*t*(bi-ai) <= (1-2p)*ai + aw
+	// t*(-bw+aw-(1-2p)*(bi-ai)) <= (1-2p)*ai + aw
+	// t*M <= N
+	// M>0 -> t <= N/M
+	// M<0 -> t >= N/M
+	// M=0 and N>=0 -> t = any value
+	// M=0 and N< 0 -> t = no value
   assert(vertexA  != NULL);
   assert(vertexB  != NULL);
   assert(axis     <= 2);
@@ -432,29 +439,29 @@ void gpu_runFrustumPlaneClippingOnTriangle(
   assert(triangles    != NULL);
   assert(nofTriangles != NULL);
   assert(triangle     != NULL);
-  // A point in clip-space P=(Px,Py,Pz,Pw) lies in camera view if and only if:
-  // forall i in {x,y,z}: -Pw <= Pi <= +Pw
-  // forall i in {x,y,z}: -Pw <= Pi and Pi <= +Pw
-  // forall i in {x,y,z}: -Pw <= Pi and -Pi >= -Pw
-  // forall i in {x,y,z}: -Pw <= Pi and -Pw <= -Pi
-  //
-  // i - axis {x,y,z}
-  //
-  // A axis refers to frustum planes:
-  // x axis - LEFT  , RIGHT
-  // y axis - BOTTOM, TOP
-  // z axis - NEAR  , FAR  
-  //
-  // A part of comparison refers to frustum planes:
-  // -Pw <= +Pi - LEFT , BOTTOM, NEAR
-  // -Pw <= -Pi - RIGHT, TOP   , FAR
-  //
-  // -Pw <= (2p-1)Pi
-  // n - positive/negative {0,1}
-  // p = 1 -> LEFT , BOTTOM, NEAR
-  // p = 0 -> RIGHT, TOP   , FAR
-  //
-  // Comparison: -Pw <= Py refers to BOTTOM frustum plane
+	// A point in clip-space P=(Px,Py,Pz,Pw) lies in camera view if and only if:
+	// forall i in {x,y,z}: -Pw <= Pi <= +Pw
+	// forall i in {x,y,z}: -Pw <= Pi and Pi <= +Pw
+	// forall i in {x,y,z}: -Pw <= Pi and -Pi >= -Pw
+	// forall i in {x,y,z}: -Pw <= Pi and -Pw <= -Pi
+	//
+	// i - axis {x,y,z}
+	//
+	// A axis refers to frustum planes:
+	// x axis - LEFT  , RIGHT
+	// y axis - BOTTOM, TOP
+	// z axis - NEAR  , FAR
+	//
+	// A part of comparison refers to frustum planes:
+	// -Pw <= +Pi - LEFT , BOTTOM, NEAR
+	// -Pw <= -Pi - RIGHT, TOP   , FAR
+	//
+	// -Pw <= (2p-1)Pi
+	// n - positive/negative {0,1}
+	// p = 1 -> LEFT , BOTTOM, NEAR
+	// p = 0 -> RIGHT, TOP   , FAR
+	//
+	// Comparison: -Pw <= Py refers to BOTTOM frustum plane
 
   size_t axis = 0;
   if     (plane == LEFT   || plane == RIGHT)axis = 0;
@@ -476,33 +483,33 @@ void gpu_runFrustumPlaneClippingOnTriangle(
         positive);
   }
 
-  // Binary mask of visible vertices 
+	// Binary mask of visible vertices
   uint32_t visible = 0u;
   for(size_t i=0;i<VERTICES_PER_TRIANGLE;++i)visible |= ((uint32_t)(tMin[i] == 0.f && tMin[i] <= tMax[i]))<<i;
 
-  // no vertex is in front of frustum plane
+	// no vertex is in front of frustum plane
   if(visible == 0x0){
-    //fprintf(stderr,"zero\n");
+  	//fprintf(stderr,"zero\n");
     return;
   }
 
-  // only one vertex is in front of frustum plane
+	// only one vertex is in front of frustum plane
   if(visible == 0x1 || visible == 0x2 || visible == 0x4){
-    //fprintf(stderr,"one\n");
+  	//fprintf(stderr,"one\n");
     gpu_writeClippedTriangle_OneVertexVisible(triangles,nofTriangles,visible,tMin,tMax,triangle);
     return;
   }
 
-  // two vertrices are in front of frustum plane
+	// two vertrices are in front of frustum plane
   if(visible == 0x3 || visible == 0x5 || visible == 0x6){
-    //fprintf(stderr,"two\n");
+  	//fprintf(stderr,"two\n");
     gpu_writeClippedTriangle_TwoVerticesVisible(triangles,nofTriangles,visible,tMin,tMax,triangle);
     return;
   }
 
-  // all vertices are in front of frustum plane
+	// all vertices are in front of frustum plane
   if(visible == 0x7){
-    //fprintf(stderr,"three\n");
+  	//fprintf(stderr,"three\n");
     gpu_writeClippedTriangle_ThreeVerticesVisible(triangles,nofTriangles,triangle);
     return;
   }
@@ -538,17 +545,17 @@ void gpu_runTriangleClipping(
   assert(input  != NULL);
   output->nofTriangles = 0;
 
-  //full clipping
-  //GPUTriangleList c;
-  //c.nofTriangles = 0;
-  //gpu_runFrustumPlaneClippingOnTriangle(c.triangles,&c.nofTriangles,input,NEAR);
-  //gpu_runFrustumPlaneClippingOnTriangleList(output,&c    ,FAR   );
-  //gpu_runFrustumPlaneClippingOnTriangleList(&c    ,output,LEFT  );
-  //gpu_runFrustumPlaneClippingOnTriangleList(output,&c    ,RIGHT );
-  //gpu_runFrustumPlaneClippingOnTriangleList(&c    ,output,BOTTOM);
-  //gpu_runFrustumPlaneClippingOnTriangleList(output,&c    ,TOP   );
+	//full clipping
+	//GPUTriangleList c;
+	//c.nofTriangles = 0;
+	//gpu_runFrustumPlaneClippingOnTriangle(c.triangles,&c.nofTriangles,input,NEAR);
+	//gpu_runFrustumPlaneClippingOnTriangleList(output,&c    ,FAR   );
+	//gpu_runFrustumPlaneClippingOnTriangleList(&c    ,output,LEFT  );
+	//gpu_runFrustumPlaneClippingOnTriangleList(output,&c    ,RIGHT );
+	//gpu_runFrustumPlaneClippingOnTriangleList(&c    ,output,BOTTOM);
+	//gpu_runFrustumPlaneClippingOnTriangleList(output,&c    ,TOP   );
 
-  //near plane clipping
+	//near plane clipping
   gpu_runFrustumPlaneClippingOnTriangle(output->triangles,&output->nofTriangles,input,NEAR);
 }
 
@@ -566,9 +573,9 @@ void gpu_runViewportTransformation(
     size_t             const height   ){
   assert(primitive != NULL);
   for(size_t v=0;v<primitive->nofUsedVertices;++v){
-    primitive->vertices[v].gl_Position.data[0] = 
+    primitive->vertices[v].gl_Position.data[0] =
         (primitive->vertices[v].gl_Position.data[0]*.5f+.5f)*(float)width;
-    primitive->vertices[v].gl_Position.data[1] = 
+    primitive->vertices[v].gl_Position.data[1] =
         (primitive->vertices[v].gl_Position.data[1]*.5f+.5f)*(float)height;
   }
 }
@@ -597,15 +604,15 @@ void gpu_restrictLineBorders(
   assert(minX     != NULL);
   assert(maxX     != NULL);
   assert(edgeLine != NULL);
-  // edgeLine (a,b,c): ax+by+c = 0
-  // half space that contains triangle: ax+by+c>=0
-  // ax+by+c>=0
-  // ax>=-by-c
-  // ax>=d
-  // a>0 -> x >= d/a
-  // a<0 -> x <= d/a
-  // a=0 && d <= 0 -> no restriction
-  // a=0 && d >  0 -> no values are possible
+	// edgeLine (a,b,c): ax+by+c = 0
+	// half space that contains triangle: ax+by+c>=0
+	// ax+by+c>=0
+	// ax>=-by-c
+	// ax>=d
+	// a>0 -> x >= d/a
+	// a<0 -> x <= d/a
+	// a=0 && d <= 0 -> no restriction
+	// a=0 && d >  0 -> no values are possible
   float const a = edgeLine->data[0];
   float const b = edgeLine->data[1];
   float const c = edgeLine->data[2];
@@ -636,26 +643,50 @@ void gpu_computeLineBorders(
 
 /// \addtogroup gpu_side
 /// @{
-
 void gpu_computeScreenSpaceBarycentrics(
     Vec3      *const coords                            ,
     Vec2 const*const pixelCenter                       ,
     Vec2       const vertices   [VERTICES_PER_TRIANGLE],
     Vec3       const lines      [EDGES_PER_TRIANGLE   ]){
-  /// \todo V této funkci spočtěte barycentrické coordináty trojúhelníku v obrazovce.
-  /// Coordináty zapište do coords.
-  /// V proměnné vertices naleznete pozice vrcholů ve 2D v obrazovce.
-  /// V proměnné lines naleznete rovnice přímek hran trojúhelníka.
-  /// Rovnice přímek jsou normalizované (velikost normály je 1).
-  /// Normála směřuje směrem dovnitř trojúhelníka.
-  assert(coords      != NULL);
-  assert(pixelCenter != NULL);
-  assert(vertices    != NULL);
-  assert(lines       != NULL);
-  (void)coords;
-  (void)pixelCenter;
-  (void)vertices;
-  (void)lines;
+	/// \todo V této funkci spočtěte barycentrické coordináty trojúhelníku v obrazovce.
+	/// Coordináty zapište do coords.
+	/// V proměnné vertices naleznete pozice vrcholů ve 2D v obrazovce.
+	/// V proměnné lines naleznete rovnice přímek hran trojúhelníka.
+	/// Rovnice přímek jsou normalizované (velikost normály je 1).
+	/// Normála směřuje směrem dovnitř trojúhelníka.
+    assert(coords      != NULL);
+    assert(pixelCenter != NULL);
+    assert(vertices    != NULL);
+    assert(lines       != NULL);
+    Vec2 vector[3];
+
+    vector[0].data[0] = vertices[1].data[0] - vertices[0].data[0];
+    vector[0].data[1] = vertices[1].data[1] - vertices[0].data[1];
+
+    vector[1].data[0] = vertices[2].data[0] - vertices[0].data[0];
+    vector[1].data[1] = vertices[2].data[1] - vertices[0].data[1];
+
+    vector[2].data[0] = pixelCenter->data[0] - vertices[0].data[0];
+    vector[2].data[1] = pixelCenter->data[1] - vertices[0].data[1];
+
+    float d00 = vector[0].data[0]*vector[0].data[0] + vector[0].data[1]*vector[0].data[1];
+    float d01 = vector[0].data[0]*vector[1].data[0] + vector[0].data[1]*vector[1].data[1];
+    float d11 = vector[1].data[0]*vector[1].data[0] + vector[1].data[1]*vector[1].data[1];
+    float d20 = vector[2].data[0]*vector[0].data[0] + vector[2].data[1]*vector[0].data[1];
+    float d21 = vector[2].data[0]*vector[1].data[0] + vector[2].data[1]*vector[1].data[1];
+
+    /*sub_Vec2(&vector[0], &vertices[1], &vertices[0]);
+    sub_Vec2(&vector[1], &vertices[2], &vertices[0]);
+    sub_Vec2(&vector[2], pixelCenter, &vertices[0]);
+    float d00 = dot_Vec2(&vector[0], &vector[0]);
+    float d01 = dot_Vec2(&vector[0], &vector[1]);
+    float d11 = dot_Vec2(&vector[1], &vector[1]);
+    float d20 = dot_Vec2(&vector[2], &vector[0]);
+    float d21 = dot_Vec2(&vector[2], &vector[1]);*/
+    float denom = 1.0f / (d00 * d11 - d01 * d01);
+    coords->data[0] = (d11 * d20 - d01 * d21) * denom;
+    coords->data[1] = (d00 * d21 - d01 * d20) * denom;
+    coords->data[2] = 1.0f - coords->data[0] - coords->data[1];
 }
 
 /// @}
@@ -712,7 +743,7 @@ void gpu_createFragment(
     size_t const nofComponents = (size_t)primitive->types[attribute];
     if   (primitive->interpolations[attribute] == FLAT){
       for(size_t component=0;component<nofComponents;++component)
-        ((float*)fragment->attributes.attributes[attribute])[component] = 
+        ((float*)fragment->attributes.attributes[attribute])[component] =
           ((float*)primitive->vertices[0].attributes[attribute])[component];
     }else if(primitive->interpolations[attribute] == NOPERSPECTIVE){
       for(size_t component=0;component<nofComponents;++component){
@@ -771,7 +802,7 @@ void gpu_rasterizeTriangle(
     size_t             const height   ){
   assert(primitive != NULL);
 
-  // bounding quad of primitive
+	// bounding quad of primitive
   float yMin = +INFINITY;
   float yMax = -INFINITY;
   for(size_t v = 0; v < primitive->nofUsedVertices; ++v){
@@ -837,20 +868,20 @@ void gpu_createSubPrimitive(
     subPrimitive->types         [a] = primitive->types         [a];
   }
 
-  //interpolate vertex attributes to subPrimitive
+	//interpolate vertex attributes to subPrimitive
   for(size_t vertexIndex = 0; vertexIndex < VERTICES_PER_TRIANGLE; ++vertexIndex){
-    // interpolate positions of vertices
+  	// interpolate positions of vertices
     for(size_t componentIndex = 0; componentIndex<4; ++componentIndex){
       float const values[WEIGHTS_PER_BARYCENTRICS] = {
         primitive->vertices[0].gl_Position.data[componentIndex],
         primitive->vertices[1].gl_Position.data[componentIndex],
         primitive->vertices[2].gl_Position.data[componentIndex]
       };
-      subPrimitive->vertices[vertexIndex].gl_Position.data[componentIndex] = 
+      subPrimitive->vertices[vertexIndex].gl_Position.data[componentIndex] =
         gpu_noperspectiveInterpolate(values,clippedTriangle->coords[vertexIndex].data);
     }
 
-    // interpolate vertex attributes
+  	// interpolate vertex attributes
     for(size_t attributeIndex = 0; attributeIndex < MAX_ATTRIBUTES; ++attributeIndex){
       if(primitive->types[attributeIndex] == ATTRIB_EMPTY)continue;
       size_t const dimension = (size_t)primitive->types[attributeIndex];
@@ -860,7 +891,7 @@ void gpu_createSubPrimitive(
           ((float*)primitive->vertices[1].attributes[attributeIndex])[componentIndex],
           ((float*)primitive->vertices[2].attributes[attributeIndex])[componentIndex]
         };
-        ((float*)subPrimitive->vertices[vertexIndex].attributes[attributeIndex])[componentIndex] = 
+        ((float*)subPrimitive->vertices[vertexIndex].attributes[attributeIndex])[componentIndex] =
           gpu_noperspectiveInterpolate(values,clippedTriangle->coords[vertexIndex].data);
       }
     }
@@ -896,11 +927,11 @@ void cpu_drawTriangles(
   VertexShader                       const vertexShader = gpu_getActiveVertexShader(gpu);
   size_t                             const width        = gpu_getViewportWidth     (gpu);
   size_t                             const height       = gpu_getViewportHeight    (gpu);
-  // loop over all triangles
+	// loop over all triangles
   for(size_t base = 0; base+VERTICES_PER_TRIANGLE-1<nofVertices; base += VERTICES_PER_TRIANGLE){
     GPUPrimitive primitive;
     gpu_initPrimitive(&primitive,gpu);
-    // assembly primitive
+  	// assembly primitive
     gpu_runPrimitiveAssembly(
         gpu                  ,
         &primitive           ,
@@ -909,15 +940,15 @@ void cpu_drawTriangles(
         base                 ,
         vertexShader         );
 
-    //perform primitive clipping
+  	//perform primitive clipping
     GPUTriangle triangle;
     gpu_initTriangle(&triangle,&primitive);
     GPUTriangleList clippedTriangles;
     gpu_runTriangleClipping(&clippedTriangles,&triangle);
 
-    //draw sub primitives
+  	//draw sub primitives
     for(size_t c = 0; c < clippedTriangles.nofTriangles; ++c){
-      //create sub primitive using clipped triangle and original primitive
+    	//create sub primitive using clipped triangle and original primitive
       GPUPrimitive subPrimitive;
       gpu_createSubPrimitive(&subPrimitive,&primitive,clippedTriangles.triangles+c);
       gpu_runPerspectiveDivision(&subPrimitive);
