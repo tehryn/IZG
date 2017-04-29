@@ -31,7 +31,12 @@ VertexIndex gpu_computeGLVertexID(
 	/// Pokud je aktivní indexing, je potřeba zaadresovat správný gl_VertexID
 	/// z bufferu indexů (indices) pomocí čísla invokace.
 	/// Indexing je aktivní, pokud buffer indexů není NULL.
-    return (indices == NULL)?vertexShaderInvocation:indices[vertexShaderInvocation];
+	if (indices == NULL) {
+        return vertexShaderInvocation;
+    }
+    else {
+        return indices[vertexShaderInvocation];
+    }
 }
 
 void const* gpu_computeVertexAttributeDataPointer(
