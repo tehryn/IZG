@@ -51,13 +51,17 @@ void phong_vertexShader(
     Mat4 const*const proj = shader_interpretUniformAsMat4(uniformsHandle, projectionMatrixLocation);
     Vec3 const*const position = vs_interpretInputVertexAttributeAsVec3(gpu, input, 0);
     Vec3 const*const normalPosition = vs_interpretInputVertexAttributeAsVec3(gpu, input, 1);
+
     Mat4 mvp;
     multiply_Mat4_Mat4(&mvp,proj,view);
+
     Vec4 pos4;
     copy_Vec3Float_To_Vec4(&pos4,position,1.f);
     multiply_Mat4_Vec4(&output->gl_Position, &mvp, &pos4);
+
     Vec3 *const fragment = vs_interpretOutputVertexAttributeAsVec3(gpu, output, 0);
     Vec3 *const normal = vs_interpretOutputVertexAttributeAsVec3(gpu, output, 1);
+
     fragment->data[0] = position->data[0];
     fragment->data[1] = position->data[1];
     fragment->data[2] = position->data[2];
@@ -65,6 +69,7 @@ void phong_vertexShader(
     normal->data[1]   = normalPosition->data[1];
     normal->data[2]   = normalPosition->data[2];
 }
+
 #define MAX(x, y) ((x)>(y)?(x):(y))
 void phong_fragmentShader(
     GPUFragmentShaderOutput     *const output,
@@ -92,8 +97,8 @@ void phong_fragmentShader(
     ///  - shader_interpretUniformAsVec3()
     ///  - fs_interpretInputAttributeAsVec3()
     Uniforms handler     = gpu_getUniformsHandle(gpu);
-    const Vec3 *camera    = shader_interpretUniformAsVec3(handler, getUniformLocation(gpu, "cameraPosition"));
-    const Vec3 *light   = shader_interpretUniformAsVec3(handler, getUniformLocation(gpu, "lightPosition"));
+    const Vec3 *camera   = shader_interpretUniformAsVec3(handler, getUniformLocation(gpu, "cameraPosition"));
+    const Vec3 *light    = shader_interpretUniformAsVec3(handler, getUniformLocation(gpu, "lightPosition"));
     const Vec3 *fragment = fs_interpretInputAttributeAsVec3(gpu, input, 0);
     const Vec3 *fragment_normal  = fs_interpretInputAttributeAsVec3(gpu, input, 1);
 
