@@ -103,14 +103,19 @@ void gpu_runPrimitiveAssembly(
 	///  - GPUVertexShaderInput()
 	GPUVertexPullerOutput puller_out;
     GPUVertexShaderInput  shader_in;
-    GPUVertexShaderOutput shader_out;
+
     for (unsigned i = 0; i < nofPrimitiveVertices; i++) {
-        shader_in.gl_VertexID = gpu_computeGLVertexID(puller->indices, baseVertexShaderInvocation + i);
+
+        shader_in.gl_VertexID  = gpu_computeGLVertexID(puller->indices, baseVertexShaderInvocation + i);
+
         gpu_runVertexPuller(&puller_out, puller, baseVertexShaderInvocation + i);
-        shader_in.attributes  = &puller_out;
-        (*vertexShader)(&shader_out, &shader_in, gpu);
-        primitive->vertices[i] = shader_out;
+
+        shader_in.attributes   = &puller_out;
+
+        (*vertexShader)(&primitive->vertices[i], &shader_in, gpu);
+
     }
+
     primitive->nofUsedVertices = nofPrimitiveVertices;
 }
 
@@ -663,8 +668,8 @@ void gpu_computeScreenSpaceBarycentrics(
     assert(pixelCenter != NULL);
     assert(vertices    != NULL);
     assert(lines       != NULL);
-    Vec2 vector[3];
 
+    Vec2 vector[3];
     vector[0].data[0] = vertices[1].data[0] - vertices[0].data[0];
     vector[0].data[1] = vertices[1].data[1] - vertices[0].data[1];
 
@@ -680,18 +685,20 @@ void gpu_computeScreenSpaceBarycentrics(
     float d20 = vector[2].data[0]*vector[0].data[0] + vector[2].data[1]*vector[0].data[1];
     float d21 = vector[2].data[0]*vector[1].data[0] + vector[2].data[1]*vector[1].data[1];
 
-    /*sub_Vec2(&vector[0], &vertices[1], &vertices[0]);
+/*    Vec2 vector[3];
+    sub_Vec2(&vector[0], &vertices[1], &vertices[0]);
     sub_Vec2(&vector[1], &vertices[2], &vertices[0]);
     sub_Vec2(&vector[2], pixelCenter, &vertices[0]);
     float d00 = dot_Vec2(&vector[0], &vector[0]);
     float d01 = dot_Vec2(&vector[0], &vector[1]);
     float d11 = dot_Vec2(&vector[1], &vector[1]);
     float d20 = dot_Vec2(&vector[2], &vector[0]);
-    float d21 = dot_Vec2(&vector[2], &vector[1]);*/
+    float d21 = dot_Vec2(&vector[2], &vector[1]);
+    */
     float denom = 1.0f / (d00 * d11 - d01 * d01);
-    coords->data[0] = (d11 * d20 - d01 * d21) * denom;
-    coords->data[1] = (d00 * d21 - d01 * d20) * denom;
-    coords->data[2] = 1.0f - coords->data[0] - coords->data[1];
+    coords->data[1] = (d11 * d20 - d01 * d21) * denom;
+    coords->data[2] = (d00 * d21 - d01 * d20) * denom;
+    coords->data[0] = 1.0f - coords->data[1] - coords->data[2];
 }
 
 /// @}
