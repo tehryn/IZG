@@ -65,7 +65,7 @@ void phong_vertexShader(
     normal->data[1]   = normalPosition->data[1];
     normal->data[2]   = normalPosition->data[2];
 }
-
+#define MAX(x, y) ((x)>(y)?(x):(y))
 void phong_fragmentShader(
     GPUFragmentShaderOutput     *const output,
     GPUFragmentShaderInput const*const input ,
@@ -118,7 +118,7 @@ void phong_fragmentShader(
     multiply_Vec3_Float(&Rvector, &normal, 2*NL);
     sub_Vec3(&Rvector, &Rvector, &Lvector);
 
-    float RV  = powf(dot_Vec3(&Rvector, &Vvector), 40.0f);
+    float RV  = powf(MAX(dot_Vec3(&Rvector, &Vvector), 0.0f), 40.0f);
     if (RV > 0) {
         r += RV;
         g += RV;
